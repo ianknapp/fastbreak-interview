@@ -181,19 +181,7 @@ export async function GET() {
           console.log(`📋 Player ${playerId}: Collected ${result.data.length} game records`);
         }
       });
-      
-      // Small delay between batches to avoid rate limiting
-      if (i + batchSize < playerIds.length) {
-        console.log('⏱️ Waiting 500ms between batches...');
-        await new Promise(resolve => setTimeout(resolve, 500));
-      }
     }
-    
-    const totalStatsCount = Object.values(playersWithGameStats).reduce(
-      (count, games) => count + games.length, 0
-    );
-    console.log(`✅ Retrieved ${totalStatsCount} total game stats for ${Object.keys(playersWithGameStats).length} players`);
-    
     // 4. Convert game stats to average stats and merge with player data
     const playersWithStats: PlayerWithStats[] = [];
     
@@ -204,10 +192,7 @@ export async function GET() {
       // Calculate average stats from game stats
       const avgStats = calculateAverageStats(gameStats);
       playersWithStats.push({ ...player, stats: avgStats });
-    }
-    
-    console.log(`🔄 Successfully calculated average stats for ${playersWithStats.length} players`);
-    
+    }    
     if (playersWithStats.length === 0) {
       console.log('⚠️ No players with stats found, returning empty data');
       return NextResponse.json({
@@ -216,15 +201,6 @@ export async function GET() {
         pointsDistribution: [],
         players: []
       });
-    }
-    
-    // Log players that have no stats
-    const playersWithoutStats = players.filter(
-      (player: NBAPlayer) => !playersWithGameStats[player.id] || playersWithGameStats[player.id].length === 0
-    );
-    
-    if (playersWithoutStats.length > 0) {
-      console.log('⚠️ Players without stats:', playersWithoutStats.map((p: NBAPlayer) => `${p.first_name} ${p.last_name} (ID: ${p.id})`));
     }
     
     // 5. Transform data for dashboard in one operation
