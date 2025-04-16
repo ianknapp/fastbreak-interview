@@ -36,9 +36,9 @@ export default async function DashboardLayout({
             <Link href="/dashboard" className="hover:underline">
               Home
             </Link>
-            <Link href="/api/auth/logout?returnTo=/" className="hover:underline">
+            <a href="/api/auth/logout?returnTo=/" className="hover:underline">
               Logout
-            </Link>
+            </a>
           </nav>
         </div>
       </header>
