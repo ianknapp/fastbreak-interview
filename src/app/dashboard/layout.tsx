@@ -36,9 +36,10 @@ export default async function DashboardLayout({
             <Link href="/dashboard" className="hover:underline">
               Home
             </Link>
-            <a href="/api/auth/logout?returnTo=/" className="hover:underline">
-              Logout
-            </a>
+            <form action="/api/auth/logout" method="GET">
+              <input type="hidden" name="returnTo" value="/" />
+              <button type="submit" className="hover:underline">Logout</button>
+            </form>
           </nav>
         </div>
       </header>
